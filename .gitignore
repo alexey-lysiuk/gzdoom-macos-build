@@ -1,2 +1,5 @@
+﻿/gzdoom/
 /build/
+/dist/
 /libs/
+*.dmg
