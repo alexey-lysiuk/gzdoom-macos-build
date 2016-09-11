@@ -1,0 +1,79 @@
+#!/bin/sh
+
+set -o errexit
+
+cd "`dirname \"$0\"`/"
+
+ROOT_DIR=`pwd`/
+BUILD_DIR=${ROOT_DIR}build/
+DIST_DIR=${ROOT_DIR}dist/
+LIBS_DIR=${ROOT_DIR}libs/
+TP_DIR=${ROOT_DIR}thirdparty/
+SYSROOT_DIR=${TP_DIR}macos/MacOSX10.7.sdk
+FS_DIR=${TP_DIR}fluidsynth/
+
+export PATH="${LIBS_DIR}bin:${PATH}"
+export CFLAGS="-I${LIBS_DIR}include -mmacosx-version-min=10.7 -isysroot ${SYSROOT_DIR}"
+export CPPFLAGS="-I${LIBS_DIR}include -mmacosx-version-min=10.7 -isysroot ${SYSROOT_DIR}"
+export CXXFLAGS="-I${LIBS_DIR}include -mmacosx-version-min=10.7 -isysroot ${SYSROOT_DIR}"
+export LDFLAGS="-L${LIBS_DIR}lib -mmacosx-version-min=10.7 -isysroot ${SYSROOT_DIR}"
+
+function mkcd {
+	if [ ! -e $1 ]; then
+		mkdir -p $1
+	fi
+	
+	cd $1
+}
+
+function mklib {
+	mkcd "${BUILD_DIR}$1"
+	"${TP_DIR}$1/configure" --prefix="${LIBS_DIR}" --enable-static --disable-shared ${@:2}
+	make install
+}
+
+mklib autoconf
+mklib automake
+mklib pkg-config --with-internal-glib
+mklib ffi
+mklib gettext
+mklib glib
+mklib ogg
+mklib vorbis
+mklib flac
+mklib mpg123
+mklib sndfile
+
+CMAKE_LINKER_FLAGS=-L${LIBS_DIR}/lib\ -logg\ -lvorbis\ -lvorbisenc\ -lFLAC
+
+mkcd "${BUILD_DIR}fluidsynth"
+"${TP_DIR}cmake/bin/cmake"                              \
+	-DCMAKE_INSTALL_PREFIX="${LIBS_DIR}"                \
+	-DCMAKE_OSX_DEPLOYMENT_TARGET="10.7"                \
+ 	-DCMAKE_OSX_SYSROOT="${SYSROOT_DIR}"                \
+ 	-DCMAKE_SHARED_LINKER_FLAGS="${CMAKE_LINKER_FLAGS}" \
+ 	-Denable-framework=NO                               \
+ 	-DLIB_SUFFIX=""                                     \
+	"${FS_DIR}"
+make install
+
+if [ -e "${DIST_DIR}" ]; then
+	rm -r "${DIST_DIR}"
+fi
+
+mkcd "${DIST_DIR}"
+cp "${LIBS_DIR}lib/libfluidsynth.1.dylib" .
+
+for FN in AUTHORS COPYING NEWS README THANKS; do
+	cp "${FS_DIR}$FN" .
+done
+
+DMG_NAME=FluidSynth-`"${LIBS_DIR}/bin/fluidsynth" --version | awk '/FluidSynth version [0-9.]*/ { print $3 }'`
+DMG_PATH=${ROOT_DIR}${DMG_NAME}.dmg
+
+if [ -e "${DMG_PATH}" ]; then
+	rm "${DMG_PATH}"
+fi
+
+hdiutil create -srcfolder "${DIST_DIR}" -volname "${DMG_NAME}" \
+	-format UDBZ -fs HFS+ -fsargs "-c c=64,a=16,e=16" "${DMG_PATH}"
