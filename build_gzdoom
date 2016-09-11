@@ -46,7 +46,7 @@ mkcd "${BUILD_DIR}openal-soft"
  	-DCMAKE_OSX_SYSROOT="${SYSROOT_DIR}" \
  	-DLIBTYPE="STATIC"                   \
 	-DALSOFT_CPUEXT_SSE4_1="NO"          \
-	${TP_DIR}openal-soft
+	"${TP_DIR}openal-soft"
 make install
 
 cd "${ROOT_DIR}"
