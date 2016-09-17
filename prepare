@@ -1,0 +1,56 @@
+#!/bin/sh
+
+if [ ! -e .timestamp ]; then
+	NOW=`date "+%Y%m%d%H%M.%S"`
+
+	echo "Setting timestamps..."
+	find thirdparty -exec touch -t ${NOW} '{}' \;
+	touch .timestamp
+fi
+
+ROOT_DIR=`pwd`/
+BUILD_DIR=${ROOT_DIR}build/
+DIST_DIR=${ROOT_DIR}dist/
+LIBS_DIR=${ROOT_DIR}libs/
+TP_DIR=${ROOT_DIR}thirdparty/
+SYSROOT_DIR=${TP_DIR}macos/MacOSX10.7.sdk
+FMOD_DIR=${TP_DIR}fmodex/
+FS_DIR=${TP_DIR}fluidsynth/
+
+CMAKE_LINKER_FLAGS=-L${LIBS_DIR}/lib\ -logg\ -lvorbis\ -lvorbisenc\ -lFLAC
+
+export PATH="${LIBS_DIR}bin:${PATH}"
+export CFLAGS="-I${LIBS_DIR}include -mmacosx-version-min=10.7 -isysroot ${SYSROOT_DIR}"
+export CPPFLAGS="-I${LIBS_DIR}include -mmacosx-version-min=10.7 -isysroot ${SYSROOT_DIR}"
+export CXXFLAGS="-I${LIBS_DIR}include -mmacosx-version-min=10.7 -isysroot ${SYSROOT_DIR}"
+export LDFLAGS="-L${LIBS_DIR}lib -mmacosx-version-min=10.7 -isysroot ${SYSROOT_DIR}"
+
+function mkcd {
+	if [ ! -e $1 ]; then
+		mkdir -p $1
+	fi
+	
+	cd $1
+}
+
+function mklib {
+	mkcd "${BUILD_DIR}$1"
+	"${TP_DIR}$1/configure" --prefix="${LIBS_DIR}" --enable-static --disable-shared ${@:2}
+	make install
+}
+
+mklib pkg-config --with-internal-glib
+mklib ogg
+mklib vorbis
+mklib flac
+mklib mpg123
+mklib sndfile
+
+function mkdmg {
+	if [ -e "$1" ]; then
+		rm "$1"
+	fi
+
+	hdiutil create -srcfolder "${DIST_DIR}" -volname "$2" \
+		-format UDBZ -fs HFS+ -fsargs "-c c=64,a=16,e=16" "$1"
+}
