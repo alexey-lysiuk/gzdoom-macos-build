@@ -32,8 +32,6 @@ function mklib {
 	make install
 }
 
-mklib autoconf
-mklib automake
 mklib pkg-config --with-internal-glib
 mklib ffi
 mklib gettext
