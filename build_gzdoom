@@ -9,8 +9,8 @@ mkcd "${BUILD_DIR}openal-soft"
 "${TP_DIR}cmake/bin/cmake"               \
 	-DCMAKE_INSTALL_PREFIX="${LIBS_DIR}" \
 	-DCMAKE_OSX_DEPLOYMENT_TARGET="10.7" \
- 	-DCMAKE_OSX_SYSROOT="${SYSROOT_DIR}" \
- 	-DLIBTYPE="STATIC"                   \
+	-DCMAKE_OSX_SYSROOT="${SYSROOT_DIR}" \
+	-DLIBTYPE="STATIC"                   \
 	-DALSOFT_CPUEXT_SSE4_1="NO"          \
 	"${TP_DIR}openal-soft"
 make install
@@ -19,8 +19,17 @@ cd "${ROOT_DIR}"
 
 if [ ! -e gzdoom ]; then
 	git clone https://github.com/coelckers/gzdoom.git
+fi
+
+cd "${ROOT_DIR}gzdoom"
+
+if [ -n "$1" ]; then
+	git checkout "$1"
 else
-	cd gzdoom
+	git checkout master
+fi
+
+if [ "${1:0:4}" != "tags" ]; then
 	git pull
 fi
 
