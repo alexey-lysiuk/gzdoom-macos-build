@@ -11,12 +11,10 @@ mklib glib
 
 mkcd "${BUILD_DIR}fluidsynth"
 "${TP_DIR}cmake/bin/cmake"                              \
-	-DCMAKE_INSTALL_PREFIX="${LIBS_DIR}"                \
-	-DCMAKE_OSX_DEPLOYMENT_TARGET="10.7"                \
- 	-DCMAKE_OSX_SYSROOT="${SYSROOT_DIR}"                \
- 	-DCMAKE_SHARED_LINKER_FLAGS="${CMAKE_LINKER_FLAGS}" \
- 	-Denable-framework=NO                               \
- 	-DLIB_SUFFIX=""                                     \
+	${CMAKE_COMMON_OPTS}                                \
+	-DCMAKE_SHARED_LINKER_FLAGS="${CMAKE_LINKER_FLAGS}" \
+	-Denable-framework=NO                               \
+	-DLIB_SUFFIX=""                                     \
 	"${FS_DIR}"
 make install
 

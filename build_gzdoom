@@ -6,12 +6,10 @@ cd "`dirname \"$0\"`/"
 . prepare
 
 mkcd "${BUILD_DIR}openal-soft"
-"${TP_DIR}cmake/bin/cmake"               \
-	-DCMAKE_INSTALL_PREFIX="${LIBS_DIR}" \
-	-DCMAKE_OSX_DEPLOYMENT_TARGET="10.7" \
-	-DCMAKE_OSX_SYSROOT="${SYSROOT_DIR}" \
-	-DLIBTYPE="STATIC"                   \
-	-DALSOFT_CPUEXT_SSE4_1="NO"          \
+"${TP_DIR}cmake/bin/cmake"      \
+	${CMAKE_COMMON_OPTS}        \
+	-DLIBTYPE="STATIC"          \
+	-DALSOFT_CPUEXT_SSE4_1="NO" \
 	"${TP_DIR}openal-soft"
 make install
 
@@ -35,9 +33,7 @@ fi
 
 mkcd "${BUILD_DIR}gzdoom"
 "${TP_DIR}cmake/bin/cmake"                           \
-	-DCMAKE_PREFIX_PATH="${LIBS_DIR}"                \
-	-DCMAKE_OSX_DEPLOYMENT_TARGET="10.7"             \
-	-DCMAKE_OSX_SYSROOT="${SYSROOT_DIR}"             \
+	${CMAKE_COMMON_OPTS}                             \
 	-DCMAKE_EXE_LINKER_FLAGS="${CMAKE_LINKER_FLAGS}" \
 	-DFMOD_INCLUDE_DIR=${FMOD_DIR}inc                \
 	-DFMOD_LIBRARY=${FMOD_DIR}lib/libfmodex.dylib    \
