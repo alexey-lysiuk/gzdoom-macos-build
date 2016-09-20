@@ -45,13 +45,18 @@ if [ -e "${DIST_DIR}" ]; then
 	rm -r "${DIST_DIR}"
 fi
 
+BUNDLE_PATH=${DIST_DIR}GZDoom.app
+INFO_PLIST_PATH=${BUNDLE_PATH}/Contents/Info.plist
+
 mkdir "${DIST_DIR}"
-cp -R gzdoom.app "${DIST_DIR}GZDoom.app"
+cp -R gzdoom.app "${BUNDLE_PATH}"
 cp -R "${ROOT_DIR}gzdoom/docs" "${DIST_DIR}Docs"
 ln -s /Applications "${DIST_DIR}/Applications"
 
+plutil -replace LSMinimumSystemVersion -string "${MIN_VERSION}" "${INFO_PLIST_PATH}"
+
 cd "${ROOT_DIR}gzdoom"
 DMG_NAME=GZDoom-`git describe --tags`
-DMG_PATH=${ROOT_DIR}/${DMG_NAME}.dmg
+DMG_PATH=${ROOT_DIR}${DMG_NAME}.dmg
 
 mkdmg "${DMG_PATH}" "${DMG_NAME}"
