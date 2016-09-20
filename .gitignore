@@ -1,6 +1,6 @@
 /gzdoom/
-/build/
-/dist/
-/libs/
+/.build/
+/.dist/
+/.libs/
 .timestamp
 *.dmg

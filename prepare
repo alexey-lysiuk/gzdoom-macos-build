@@ -9,9 +9,9 @@ if [ ! -e .timestamp ]; then
 fi
 
 ROOT_DIR=`pwd`/
-BUILD_DIR=${ROOT_DIR}build/
-DIST_DIR=${ROOT_DIR}dist/
-LIBS_DIR=${ROOT_DIR}libs/
+BUILD_DIR=${ROOT_DIR}.build/
+DIST_DIR=${ROOT_DIR}.dist/
+LIBS_DIR=${ROOT_DIR}.libs/
 TP_DIR=${ROOT_DIR}thirdparty/
 SYSROOT_DIR=${TP_DIR}macos/MacOSX10.7.sdk
 FMOD_DIR=${TP_DIR}fmodex/
