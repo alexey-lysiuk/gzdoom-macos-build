@@ -54,6 +54,8 @@ cp -R "${ROOT_DIR}gzdoom/docs" "${DIST_DIR}Docs"
 ln -s /Applications "${DIST_DIR}/Applications"
 
 plutil -replace LSMinimumSystemVersion -string "${MIN_VERSION}" "${INFO_PLIST_PATH}"
+# Temp hack to remove
+plutil -replace NSSupportsAutomaticGraphicsSwitching -bool true "${INFO_PLIST_PATH}"
 
 cd "${ROOT_DIR}gzdoom"
 DMG_NAME=GZDoom-`git describe --tags`
