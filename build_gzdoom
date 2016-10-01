@@ -53,10 +53,15 @@ cp -R gzdoom.app "${BUNDLE_PATH}"
 cp -R "${ROOT_DIR}gzdoom/docs" "${DIST_DIR}Docs"
 ln -s /Applications "${DIST_DIR}/Applications"
 
-plutil -replace LSMinimumSystemVersion -string "${MIN_VERSION}" "${INFO_PLIST_PATH}"
-
 cd "${ROOT_DIR}gzdoom"
-DMG_NAME=GZDoom-`git describe --tags`
+VERSION=`git describe --tags`
+
+plutil -replace LSMinimumSystemVersion -string "${MIN_VERSION}" "${INFO_PLIST_PATH}"
+plutil -replace CFBundleVersion -string "${VERSION}" "${INFO_PLIST_PATH}"
+plutil -replace CFBundleShortVersionString -string "${VERSION}" "${INFO_PLIST_PATH}"
+plutil -replace CFBundleLongVersionString -string "${VERSION}" "${INFO_PLIST_PATH}"
+
+DMG_NAME=GZDoom-${VERSION}
 DMG_PATH=${ROOT_DIR}`echo ${DMG_NAME} | tr '[:upper:]' '[:lower:]'`.dmg
 
 mkdmg "${DMG_PATH}" "${DMG_NAME}"
