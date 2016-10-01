@@ -34,6 +34,7 @@ fi
 mkcd "${BUILD_DIR}gzdoom"
 "${TP_DIR}cmake/bin/cmake"                           \
 	${CMAKE_COMMON_OPTS}                             \
+	-DCMAKE_BUILD_TYPE=RelWithDebInfo                \
 	-DCMAKE_EXE_LINKER_FLAGS="${CMAKE_LINKER_FLAGS}" \
 	-DFMOD_INCLUDE_DIR=${FMOD_DIR}inc                \
 	-DFMOD_LIBRARY=${FMOD_DIR}lib/libfmodex.dylib    \
