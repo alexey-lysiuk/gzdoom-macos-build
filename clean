@@ -1,4 +1,8 @@
 #!/bin/sh
 
 cd "`dirname \"$0\"`/"
-rm -rf gzdoom .build .dist .libs .timestamp *.dmg 2>/dev/null
+rm -rf .build .dist .libs .timestamp *.dmg 2>/dev/null
+
+cd gzdoom
+git reset --hard
+git checkout master
