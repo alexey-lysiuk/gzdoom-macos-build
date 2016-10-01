@@ -57,6 +57,6 @@ plutil -replace LSMinimumSystemVersion -string "${MIN_VERSION}" "${INFO_PLIST_PA
 
 cd "${ROOT_DIR}gzdoom"
 DMG_NAME=GZDoom-`git describe --tags`
-DMG_PATH=${ROOT_DIR}${DMG_NAME}.dmg
+DMG_PATH=${ROOT_DIR}`echo ${DMG_NAME} | tr '[:upper:]' '[:lower:]'`.dmg
 
 mkdmg "${DMG_PATH}" "${DMG_NAME}"
