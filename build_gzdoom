@@ -53,6 +53,13 @@ cp -R gzdoom.app "${BUNDLE_PATH}"
 cp -R "${ROOT_DIR}gzdoom/docs" "${DIST_DIR}Docs"
 ln -s /Applications "${DIST_DIR}/Applications"
 
+FMODEX_DYLIB=${BUNDLE_PATH}/Contents/Frameworks/libfmodex.dylib
+CURRENT_ARCH=x86_64
+
+lipo "${FMODEX_DYLIB}" -extract ${CURRENT_ARCH} -output ${CURRENT_ARCH}.dylib
+rm "${FMODEX_DYLIB}"
+mv ${CURRENT_ARCH}.dylib "${FMODEX_DYLIB}"
+
 cd "${ROOT_DIR}gzdoom"
 VERSION=`git describe --tags`
 
