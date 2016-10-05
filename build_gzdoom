@@ -27,7 +27,12 @@ else
 	git checkout master
 fi
 
-if [ "${1:0:4}" != "tags" ]; then
+set +o errexit
+git symbolic-ref HEAD 2>&1 >/dev/null
+CANT_PULL=$?
+set -o errexit
+
+if [ ${CANT_PULL} -eq 0 ]; then
 	git pull
 fi
 
