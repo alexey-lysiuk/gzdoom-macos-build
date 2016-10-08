@@ -2,8 +2,8 @@
 
 set -o errexit
 
-cd "`dirname \"$0\"`/"
-. prepare
+cd "`dirname \"$0\"`/.."
+. scripts/prepare
 
 mklib ffi
 mklib gettext

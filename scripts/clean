@@ -1,6 +1,6 @@
 #!/bin/sh
 
-cd "`dirname \"$0\"`/"
+cd "`dirname \"$0\"`/.."
 rm -rf .build .dist .libs .timestamp *.dmg 2>/dev/null
 
 cd gzdoom
