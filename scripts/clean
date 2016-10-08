@@ -3,6 +3,8 @@
 cd "`dirname \"$0\"`/.."
 rm -rf .build .dist .libs .timestamp *.dmg 2>/dev/null
 
-cd gzdoom
-git reset --hard
-git checkout master
+if [ -e gzdoom ]; then
+	cd gzdoom
+	git reset --hard
+	git checkout master
+fi
