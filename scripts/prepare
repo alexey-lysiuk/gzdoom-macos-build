@@ -1,11 +1,3 @@
-if [ ! -e .timestamp ]; then
-	NOW=`date "+%Y%m%d%H%M.%S"`
-
-	echo "Setting timestamps..."
-	find thirdparty -exec touch -t ${NOW} '{}' \;
-	touch .timestamp
-fi
-
 ROOT_DIR=`pwd`/
 BUILD_DIR=${ROOT_DIR}.build/
 DIST_DIR=${ROOT_DIR}.dist/
@@ -42,6 +34,11 @@ function mklib {
 	"${TP_DIR}$1/configure" --prefix="${LIBS_DIR}" --enable-static --disable-shared ${@:2}
 	make install
 }
+
+if [ ! -e .timestamp ]; then
+	scripts/rtouch.py "${TP_DIR}"
+	touch .timestamp
+fi
 
 mklib pkg-config --with-internal-glib
 mklib ogg
