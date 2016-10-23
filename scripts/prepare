@@ -13,7 +13,9 @@ CMAKE_COMMON_OPTS=\
 \ -DCMAKE_INSTALL_PREFIX="${LIBS_DIR}"\
 \ -DCMAKE_OSX_DEPLOYMENT_TARGET="${MIN_VERSION}"\
 \ -DCMAKE_OSX_SYSROOT="${SYSROOT_DIR}"
-CMAKE_LINKER_FLAGS=-L${LIBS_DIR}/lib\ -logg\ -lvorbis\ -lvorbisenc\ -lFLAC
+CMAKE_LINKER_FLAGS=\
+\ -framework\ AudioToolbox\ -framework\ AudioUnit\ -framework\ CoreAudio\
+\ -L${LIBS_DIR}/lib\ -logg\ -lvorbis\ -lvorbisenc\ -lFLAC
 
 export PATH="${LIBS_DIR}bin:${PATH}"
 export CFLAGS="-I${LIBS_DIR}include -mmacosx-version-min=10.7 -isysroot ${SYSROOT_DIR}"

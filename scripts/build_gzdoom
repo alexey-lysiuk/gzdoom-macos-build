@@ -43,6 +43,8 @@ mkcd "${BUILD_DIR}gzdoom"
 	-DCMAKE_EXE_LINKER_FLAGS="${CMAKE_LINKER_FLAGS}" \
 	-DFMOD_INCLUDE_DIR=${FMOD_DIR}inc                \
 	-DFMOD_LIBRARY=${FMOD_DIR}lib/libfmodex.dylib    \
+	-DOPENAL_INCLUDE_DIR=${LIBS_DIR}include/AL       \
+	-DOPENAL_LIBRARY=${LIBS_DIR}lib/libopenal.a      \
 	-DDYN_OPENAL=NO                                  \
 	"${ROOT_DIR}gzdoom"
 make
